@@ -30,6 +30,8 @@ int main(int argc , char* argv[]){
 		float p1 = atof(argv[3]);
 		string img1(argv[4]);
 		string out = string(argv[5]);
+		float p2 = atof(argv[6]);
+		string img2 = string(argv[7]);
 		
 		ppm img(img1);
 		
@@ -41,7 +43,9 @@ int main(int argc , char* argv[]){
 			plain(img, (unsigned char)p1);
 		if (filter == "blackWhite")
 			blackWhite(img);
-			
+		if (filter == "shades")
+			shades(img, (unsigned char)p1);
+
 		clock_gettime(CLOCK_REALTIME, &stop);
 
 		double accum;

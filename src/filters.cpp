@@ -44,3 +44,25 @@ void blackWhite(ppm& img){
 
 }
 
+void shades(ppm& img, unsigned char shades){
+	for(int i = 0; i < img.height; i++)
+		for(int j = 0; j < img.width; j++){
+
+			int R = img.getPixel(i, j).r;
+			int G =	img.getPixel(i, j).g;
+			int B = img.getPixel(i, j).b;
+
+			int BW = (R + G + B)/3;
+
+			if (BW > 255){
+				BW = 255;
+			}
+
+			int rango = (255 - 255 % (int(shades) - 1))/(int(shades) - 1);
+
+			int resultado = (BW - BW % rango)/rango * rango;
+
+			img.setPixel(i, j, pixel(resultado, resultado, resultado));
+		}	
+}
+
