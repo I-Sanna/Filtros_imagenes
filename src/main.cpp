@@ -31,20 +31,52 @@ int main(int argc , char* argv[]){
 		string img1(argv[4]);
 		string out = string(argv[5]);
 		float p2 = atof(argv[6]);
-		string img2 = string(argv[7]);
+		string img2(argv[7]);
 		
 		ppm img(img1);
+		ppm img3;
+		try{
+			ppm img3(img2);
+		}
+		catch(exception ex){
+			cout << "";
+		}
 		
 		cout << "Aplicando filtros"<< endl;
 		struct timespec start, stop;    	
 		clock_gettime(CLOCK_REALTIME, &start);
 
 		if (filter == "plain")
-			plain(img, (unsigned char)p1);
+			if(p1 > 0)
+				plain(img, (unsigned char)p1);
+			else
+				cout << "ingrese un numero mayor a 0" << endl;
 		if (filter == "blackWhite")
 			blackWhite(img);
 		if (filter == "shades")
-			shades(img, (unsigned char)p1);
+			if(p1 > 0)
+				shades(img, (unsigned char)p1);
+			else
+				cout << "ingrese un numero mayor a 0" << endl;
+		if (filter == "brightness")
+			brightness(img, p1);
+		if (filter == "contrast")
+			contrast(img, p1);
+		if (filter == "merge")
+			merge(img, img3, p1);
+		if (filter == "boxBlur")
+			boxBlur(img);
+		if (filter == "edgeDetection")
+			edgeDetection(img, img3);
+		if (filter == "sharpen")
+			sharpen(img);
+		if (filter == "crop")
+			crop(img, p1, p2);
+		if (filter == "frame")
+			frame(img, p1, p2);
+		if (filter == "zoom")
+			zoom(img, img3, p1);
+
 
 		clock_gettime(CLOCK_REALTIME, &stop);
 
