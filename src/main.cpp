@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <string.h>
 #include <stdlib.h>
 #include <vector>
 #include <time.h>
@@ -18,10 +19,8 @@ int main(int argc , char* argv[]){
 	
 	// Asumimos que los filtros sin p1 se escriben primero (por lo tanto, el primer p1 es no nulo)
 	// Asumimos que Zoom no se puede encadenar
-
 	if(string(argv[1]) == "-help"){
 		cout << "Uso: ./main <filtro> <nthreads> <[p1]> <img1> <custom_output> <[p2]> <img2>" << endl;
-		return 0; 
 	}
 	else{
 
@@ -30,17 +29,15 @@ int main(int argc , char* argv[]){
 		float p1 = atof(argv[3]);
 		string img1(argv[4]);
 		string out = string(argv[5]);
-		float p2 = atof(argv[6]);
-		string img2(argv[7]);
+		float p2;
+		string img2 = "";
+		if(argc > 6)
+			p2 = atof(argv[6]);
+		if(argc > 7){
+			img2 = string(argv[7]);
+		}
 		
 		ppm img(img1);
-		ppm img3;
-		try{
-			ppm img3(img2);
-		}
-		catch(exception ex){
-			cout << "";
-		}
 		
 		cout << "Aplicando filtros"<< endl;
 		struct timespec start, stop;    	
@@ -48,34 +45,23 @@ int main(int argc , char* argv[]){
 
 		if (filter == "plain")
 			if(p1 > 0)
-				plain(img, (unsigned char)p1);
+				plain(img, (int)p1);
 			else
 				cout << "ingrese un numero mayor a 0" << endl;
 		if (filter == "blackWhite")
 			blackWhite(img);
 		if (filter == "shades")
 			if(p1 > 0)
-				shades(img, (unsigned char)p1);
+				shades(img, (int)p1);
 			else
 				cout << "ingrese un numero mayor a 0" << endl;
-		if (filter == "brightness")
-			brightness(img, p1);
-		if (filter == "contrast")
-			contrast(img, p1);
 		if (filter == "merge")
-			merge(img, img3, p1);
-		if (filter == "boxBlur")
-			boxBlur(img);
-		if (filter == "edgeDetection")
-			edgeDetection(img, img3);
-		if (filter == "sharpen")
-			sharpen(img);
-		if (filter == "crop")
-			crop(img, p1, p2);
-		if (filter == "frame")
-			frame(img, p1, p2);
-		if (filter == "zoom")
-			zoom(img, img3, p1);
+			if(p1 >= 0 && p1 <= 1){
+				ppm img3(img2);
+				merge(img, img3, p1);
+			}
+			else
+				cout << "ingresar un numero entre 0 y 1 para el porcentaje";
 
 
 		clock_gettime(CLOCK_REALTIME, &stop);
@@ -88,7 +74,6 @@ int main(int argc , char* argv[]){
 		img.write(out);	
 			
 		cout << "Listo" << endl;
-		return 0;
-
 	}
+	return 0;
 }
