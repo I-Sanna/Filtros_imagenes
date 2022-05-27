@@ -66,3 +66,20 @@ void shades(ppm& img, unsigned char shades){
 		}	
 }
 
+void contrast(ppm& img, float c){
+	for(int i = 0; i < img.height; i++)
+		for(int j = 0; j < img.width; j++){
+
+			int R = img.getPixel(i, j).r;
+			int G =	img.getPixel(i, j).g;
+			int B = img.getPixel(i, j).b;
+
+			int contraste = (259 * (c + 255))/(255 * (c + 259));
+
+			R = contraste * (R - 128) + 128;
+			G = contraste * (G - 128) + 128;
+			B = contraste * (B - 128) + 128;
+
+			img.setPixel(i, j, pixel(R, G, B));
+		}	
+}
