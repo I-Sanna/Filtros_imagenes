@@ -68,6 +68,9 @@ void shades(ppm& img, int shades){
 }
 
 void contrast(ppm& img, float c){
+
+	float contraste = (259 * (c + 255))/(255 * (259 - c));
+
 	for(int i = 0; i < img.height; i++)
 		for(int j = 0; j < img.width; j++){
 
@@ -75,15 +78,21 @@ void contrast(ppm& img, float c){
 			int G =	img.getPixel(i, j).g;
 			int B = img.getPixel(i, j).b;
 
-			int contraste = (259 * (c + 255))/(255 * (c + 259));
+			R = floor(contraste * (R - 128) + 128);
+			G = floor(contraste * (G - 128) + 128);
+			B = floor(contraste * (B - 128) + 128);
 
-			R = contraste * (R - 128) + 128;
-			G = contraste * (G - 128) + 128;
-			B = contraste * (B - 128) + 128;
+			if(R > 255)
+				R = 255;
+			if(G > 255)
+				G = 255;
+			if(B > 255)
+				B = 255;
 
 			img.setPixel(i, j, pixel(R, G, B));
 		}	
 }
+
 void merge(ppm& img1, ppm& img2, float perc1){
 
 	float perc2 = 1 - perc1;
@@ -99,9 +108,9 @@ void merge(ppm& img1, ppm& img2, float perc1){
 			int G2 = img2.getPixel(i, j).g;
 			int B2 = img2.getPixel(i, j).b;
 
-			float RT = floor(R1 * perc1 + R2 * perc2);
-			float GT = floor(G1 * perc1 + G2 * perc2);
-			float BT = floor(B1 * perc1 + B2 * perc2);
+			int RT = floor(R1 * perc1 + R2 * perc2);
+			int GT = floor(G1 * perc1 + G2 * perc2);
+			int BT = floor(B1 * perc1 + B2 * perc2);
 
 			if(RT > 255)
 				RT = 255;

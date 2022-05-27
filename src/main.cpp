@@ -62,6 +62,14 @@ int main(int argc , char* argv[]){
 			}
 			else
 				cout << "ingresar un numero entre 0 y 1 para el porcentaje";
+		if (filter == "contrast"){
+			if (p1 < -255)
+				cout << "ingrese un valor entre -255 y 255" << endl;
+			else if (p1 > 255)
+				cout << "ingrese un valor entre -255 y 255" << endl;
+			else
+				contrast(img, p1);
+		}
 
 
 		clock_gettime(CLOCK_REALTIME, &stop);
