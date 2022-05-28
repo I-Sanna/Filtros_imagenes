@@ -74,6 +74,8 @@ int main(int argc , char* argv[]){
 			boxBlur(img);
 		if (filter == "edgeDetection")
 			edgeDetection(img);
+		if (filter == "sharpen")
+			sharpen(img);
 
 
 		clock_gettime(CLOCK_REALTIME, &stop);
