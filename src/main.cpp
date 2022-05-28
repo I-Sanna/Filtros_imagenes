@@ -76,7 +76,12 @@ int main(int argc , char* argv[]){
 			edgeDetection(img);
 		if (filter == "sharpen")
 			sharpen(img);
-
+		if (filter == "brightness"){
+			if (p1 <= 1 && p1 >= -1 )
+				brightness(img, p1);
+			else
+				cout << "ingrese un valor 1 o -1" << endl;
+		}
 
 		clock_gettime(CLOCK_REALTIME, &stop);
 

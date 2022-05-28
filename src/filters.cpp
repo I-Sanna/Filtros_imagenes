@@ -93,6 +93,37 @@ void contrast(ppm& img, float c){
 		}	
 }
 
+void brightness(ppm& img, float b){
+
+	for(int i = 0; i < img.height; i++)
+		for(int j = 0; j < img.width; j++){
+
+			int R = img.getPixel(i, j).r;
+			int G =	img.getPixel(i, j).g;
+			int B = img.getPixel(i, j).b;
+
+			R = floor(R + 255 * b);
+			G = floor(G + 255 * b);
+			B = floor(B + 255 * b);
+
+			if(R > 255)
+				R = 255;
+			if(G > 255)
+				G = 255;
+			if(B > 255)
+				B = 255;
+
+			if(R < 0)
+				R = 0;
+			if(G < 0)
+				G = 0;
+			if(B < 0)
+				B = 0;
+
+			img.setPixel(i, j, pixel(R, G, B));
+		}	
+}
+
 void merge(ppm& img1, ppm& img2, float perc1){
 
 	float perc2 = 1 - perc1;
