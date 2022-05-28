@@ -72,6 +72,8 @@ int main(int argc , char* argv[]){
 		}
 		if (filter == "boxBlur")
 			boxBlur(img);
+		if (filter == "edgeDetection")
+			edgeDetection(img);
 
 
 		clock_gettime(CLOCK_REALTIME, &stop);

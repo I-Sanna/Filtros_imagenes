@@ -20,7 +20,7 @@ void merge(ppm& img1, ppm &img2, float alpha); //Sanna Finalizado
 void frame(ppm& img, pixel color, int x); //Santella
 void boxBlur(ppm& img); //Sanna
 void zoom(ppm& img, ppm& img_zoomed, int n); //Santella
-void edgeDetection(ppm& img, ppm& img_target); //Sanna
+void edgeDetection(ppm& img); //Sanna
 void plain(ppm& img, int c); //Sanna
 void sharpen(ppm& img); //Sanna
 void crop(ppm& img, float rows, float columns); //Santella

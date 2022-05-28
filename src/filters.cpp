@@ -186,3 +186,76 @@ void boxBlur(ppm& img){
 	}
 }
 
+void edgeDetection(ppm& img){
+
+	blackWhite(img);
+	boxBlur(img);
+
+	ppm imgCopia = img;
+
+	for(int i = 0; i < img.height; i++){
+
+		if (i == 0 || i == img.height - 1)
+			continue;
+
+		for(int j = 0; j < img.width; j++){
+
+			if(j == 0 || j == img.width - 1)
+				continue;
+
+			vector<int> columnaV1 = {1, 2, 1};
+			vector<int> columnaV2 = {0, 0, 0};
+			vector<int> columnaV3 = {-1, -2, -1};
+			vector<vector<int>> matrizV = {columnaV1, columnaV2, columnaV3};	
+
+			vector<int> columnaH1 = {1, 0, -1};
+			vector<int> columnaH2 = {2, 0, -2};
+			vector<int> columnaH3 = {1, 0, -1};
+			vector<vector<int>> matrizH = {columnaH1, columnaH2, columnaH3};	
+
+			int BW = 0;
+
+			int BWV = 0;
+
+			int BWH = 0;
+
+			int x = 0;
+			int y = 0;
+
+			for (int height = -1; height <= 1; height++){
+
+				for (int width = -1; width <= 1; width++){
+
+					BW = imgCopia.getPixel(i + height, j + width).r;
+
+					BWV += BW * matrizV[x][y];
+
+					BWH += BW * matrizH[x][y];
+
+					x++;
+				}
+				x = 0;
+				y++;
+			}
+
+			if(BWV > 255)
+				BWV = 255;
+
+			if(BWV < 0)
+				BWV = 0;
+
+			if(BWH > 255)
+				BWH = 255;
+
+			if(BWH < 0)
+				BWH = 0;
+
+			int BWT = floor(sqrt(pow(BWH, 2) + pow(BWV, 2)));
+
+			cout << BWV << "/" << BWH << "/" << BWT << endl;
+
+			img.setPixel(i, j, pixel(BWT, BWT, BWT));
+		}
+	}
+}
+
