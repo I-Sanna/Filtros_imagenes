@@ -13,7 +13,7 @@
 // SINGLE-THREAD FILTERS
 
 void blackWhite(ppm& img); //Sanna Finalizado
-void contrast(ppm& img, float contrast); //Santella
+void contrast(ppm& img, float contrast); //Santella 
 void brightness(ppm& img, float b); //Santella
 void shades(ppm& img, int shades); //Sanna Finalizado
 void merge(ppm& img1, ppm &img2, float alpha); //Sanna Finalizado

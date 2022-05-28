@@ -70,6 +70,8 @@ int main(int argc , char* argv[]){
 			else
 				contrast(img, p1);
 		}
+		if (filter == "boxBlur")
+			boxBlur(img);
 
 
 		clock_gettime(CLOCK_REALTIME, &stop);

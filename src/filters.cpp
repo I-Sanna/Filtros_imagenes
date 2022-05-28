@@ -123,3 +123,66 @@ void merge(ppm& img1, ppm& img2, float perc1){
 		}
 }
 
+void boxBlur(ppm& img){
+
+	ppm img2 = img;
+
+	for(int i = 0; i < img.height; i++){
+
+		if (i == 0 || i == img.height - 1)
+			continue;
+
+		for(int j = 0; j < img.width; j++){
+
+			if(j == 0 || j == img.width - 1)
+				continue;
+
+			vector<int> columna1 = {1, 1, 1};
+			vector<int> columna2 = {1, 1, 1};
+			vector<int> columna3 = {1, 1, 1};
+			vector<vector<int>> matriz = {columna1, columna2, columna3};	
+
+			int RT = 0;
+			int GT = 0;
+			int BT = 0;
+
+			int R = 0;
+			int G = 0;
+			int B = 0;
+
+			int x = 0;
+			int y = 0;
+
+			for (int height = -1; height <= 1; height++){
+
+				for (int width = -1; width <= 1; width++){
+					R = img2.getPixel(i + height, j + width).r;
+					G =	img2.getPixel(i + height, j + width).g;
+					B = img2.getPixel(i + height, j + width).b;
+
+					RT += R * matriz[x][y];
+					GT += G * matriz[x][y];
+					BT += B * matriz[x][y];
+
+					x++;
+				}
+				x = 0;
+				y++;
+			}
+
+			RT = floor(RT / 9);
+			GT = floor(GT / 9);
+			BT = floor(BT / 9);
+
+			if(RT > 255)
+				RT = 255;
+			if(GT > 255)
+				GT = 255;
+			if(BT > 255)
+				BT = 255;
+
+			img.setPixel(i, j, pixel(RT, GT, BT));
+		}
+	}
+}
+
