@@ -48,13 +48,16 @@ int main(int argc , char* argv[]){
 				plain(img, (int)p1);
 			else
 				cout << "ingrese un numero mayor a 0" << endl;
+
 		if (filter == "blackWhite")
 			blackWhite(img);
+
 		if (filter == "shades")
 			if(p1 > 0)
 				shades(img, (int)p1);
 			else
 				cout << "ingrese un numero mayor a 0" << endl;
+
 		if (filter == "merge")
 			if(p1 >= 0 && p1 <= 1){
 				ppm img3(img2);
@@ -62,6 +65,7 @@ int main(int argc , char* argv[]){
 			}
 			else
 				cout << "ingresar un numero entre 0 y 1 para el porcentaje";
+
 		if (filter == "contrast"){
 			if (p1 < -255)
 				cout << "ingrese un valor entre -255 y 255" << endl;
@@ -70,18 +74,30 @@ int main(int argc , char* argv[]){
 			else
 				contrast(img, p1);
 		}
+
 		if (filter == "boxBlur")
 			boxBlur(img);
+
 		if (filter == "edgeDetection")
 			edgeDetection(img);
+
 		if (filter == "sharpen")
 			sharpen(img);
+
 		if (filter == "brightness"){
 			if (p1 <= 1 && p1 >= -1 )
 				brightness(img, p1);
 			else
 				cout << "ingrese un valor 1 o -1" << endl;
 		}
+
+		if (filter == "frame")
+			if (p1 < 0)
+				cout << "ingrese un valor entre 0 y 255" << endl;
+			else if (p1 > 255)
+				cout << "ingrese un valor entre 0 y 255" << endl;
+			else
+				frame(img, p1, p2);
 
 		clock_gettime(CLOCK_REALTIME, &stop);
 

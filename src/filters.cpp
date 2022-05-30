@@ -353,4 +353,14 @@ void sharpen(ppm& img){
 		}
 	}
 }
+void frame(ppm& img, int color, int x){
 
+	for(int i = 0; i < img.height; i++)
+		for(int j = 0; j < img.width; j++){
+
+			if (i < x || j < x || i > img.height - x || j > img.width - x)
+				img.setPixel(i, j, pixel(color, color, color));
+		}	
+}
+
+//borde arriba y izquierda x borde abajo y derecha largo -x
