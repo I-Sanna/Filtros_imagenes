@@ -353,6 +353,7 @@ void sharpen(ppm& img){
 		}
 	}
 }
+
 void frame(ppm& img, int color, int x){
 
 	for(int i = 0; i < img.height; i++)
@@ -361,6 +362,16 @@ void frame(ppm& img, int color, int x){
 			if (i < x || j < x || i > img.height - x || j > img.width - x)
 				img.setPixel(i, j, pixel(color, color, color));
 		}	
+}
+
+void crop(ppm& img, int rows, int columns){
+	ppm img2(img.width - columns, img.height - rows);
+	
+	for(int i = rows; i < img.height; i++)
+		for(int j = columns; j < img.width; j++){
+			img2.setPixel(i - rows, j - columns, img.getPixel(i,j));
+		}	
+	img = img2;
 }
 
 //borde arriba y izquierda x borde abajo y derecha largo -x

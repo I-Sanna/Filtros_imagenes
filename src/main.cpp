@@ -99,6 +99,9 @@ int main(int argc , char* argv[]){
 			else
 				frame(img, p1, p2);
 
+		if (filter == "crop")
+			crop(img, p1 ,p2);
+
 		clock_gettime(CLOCK_REALTIME, &stop);
 
 		double accum;
