@@ -102,6 +102,12 @@ int main(int argc , char* argv[]){
 		if (filter == "crop")
 			crop(img, p1 ,p2);
 
+		if (filter == "zoom")
+			if (p1 <= 1)
+				cout << "ingrese un valor mayor a 2" << endl;
+			else
+				zoom(img, p1);
+
 		clock_gettime(CLOCK_REALTIME, &stop);
 
 		double accum;

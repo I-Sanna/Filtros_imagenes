@@ -374,4 +374,15 @@ void crop(ppm& img, int rows, int columns){
 	img = img2;
 }
 
-//borde arriba y izquierda x borde abajo y derecha largo -x
+void zoom(ppm& img, int zoom){
+	ppm img_zoomed(img.width * zoom, img.height * zoom);
+
+	for(int i = 0; i < img.height; i++)
+		for(int j = 0; j < img.width; j++)
+
+			for(int x = 0; x < zoom; x++)
+				for (int y = 0; y < zoom; y++)
+					img_zoomed.setPixel((i * zoom) + x, (j * zoom) + y, img.getPixel(i,j));
+
+	img = img_zoomed;
+}

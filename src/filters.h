@@ -19,7 +19,7 @@ void shades(ppm& img, int shades);
 void merge(ppm& img1, ppm &img2, float alpha); 
 void frame(ppm& img, int color, int x); 
 void boxBlur(ppm& img); 
-void zoom(ppm& img, ppm& img_zoomed, int n); //Santella
+void zoom(ppm& img, int n); 
 void edgeDetection(ppm& img); 
 void plain(ppm& img, int c); 
 void sharpen(ppm& img); 
