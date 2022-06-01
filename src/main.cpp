@@ -88,7 +88,7 @@ int main(int argc , char* argv[]){
 
 			if (filter == "brightness"){
 				if (p1 <= 1 && p1 >= -1 )
-					brightness(img, p1);
+					brightness(img, p1, 0, img.width);
 				else
 					cout << "ingrese un valor 1 o -1" << endl;
 			}
@@ -135,6 +135,13 @@ int main(int argc , char* argv[]){
 					cout << "ingrese un valor entre -255 y 255" << endl;
 				else
 					multiContrast(img, n, p1);
+			}
+
+			if (filter == "brightness"){
+				if (p1 <= 1 && p1 >= -1 )
+					multiBrightness(img, n, p1);
+				else
+					cout << "ingrese un valor 1 o -1" << endl;
 			}
 			
 		}

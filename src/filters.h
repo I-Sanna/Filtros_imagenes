@@ -14,7 +14,7 @@
 
 void blackWhite(ppm& img, int start, int end); 
 void contrast(ppm& img, int contrast, int start, int end);  
-void brightness(ppm& img, float b);
+void brightness(ppm& img, float b, int start, int end);
 void shades(ppm& img, int shades, int start, int end); 
 void merge(ppm& img1, ppm &img2, float alpha); 
 void frame(ppm& img, int color, int x); 
@@ -31,5 +31,6 @@ void multiPlain(ppm& img, int threads, int c);
 void multiBlackWhite(ppm& img, int threads);
 void multiShades(ppm& img, int threads, int shadesNr);
 void multiContrast(ppm& img, int threads, int contr);
+void multiBrightness(ppm& img, int threads, float percentage);
 
 #endif

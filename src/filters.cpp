@@ -93,10 +93,10 @@ void contrast(ppm& img, int c, int start, int end){
 		}	
 }
 
-void brightness(ppm& img, float b){
+void brightness(ppm& img, float b, int start, int end){
 
 	for(int i = 0; i < img.height; i++)
-		for(int j = 0; j < img.width; j++){
+		for(int j = start; j < end; j++){
 
 			int R = img.getPixel(i, j).r;
 			int G =	img.getPixel(i, j).g;
@@ -455,6 +455,24 @@ void multiContrast(ppm& img, int threads, int contr){
 	}
 
 	contrast(img, contr, average * threads, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
+}
+
+void multiBrightness(ppm& img, int threads, float percentage){
+
+	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+
+		ths.push_back(thread(brightness, ref(img), percentage, average * i, average * (i + 1)));
+	}
+
+	brightness(img, percentage, average * threads, img.width);
 
 	for (int i = 0; i < ths.size(); i++){
 		ths[i].join();
