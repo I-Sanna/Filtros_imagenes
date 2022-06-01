@@ -5,8 +5,8 @@
 #include <math.h>       /* sqrt */
 #include <vector>
 #include "filters.h"
-#include <thread>  
 #include <atomic>  
+#include <thread>
 
 #define BLACK 0
 
@@ -16,11 +16,11 @@ using namespace std;
 
 // Filtro plano como ejemplo
 
-void plain(ppm& img, int c)
+void plain(ppm& img, int c, int start, int end)
 {
 
 	for(int i = 0; i < img.height; i++)
-		for(int j = 0; j < img.width; j++)		
+		for(int j = start; j < end; j++)		
 			img.setPixel(i, j, pixel(c,c,c));
 
 }
@@ -385,4 +385,24 @@ void zoom(ppm& img, int zoom){
 					img_zoomed.setPixel((i * zoom) + x, (j * zoom) + y, img.getPixel(i,j));
 
 	img = img_zoomed;
+}
+
+// MULTI-THREAD FUNCTIONS
+
+void multiPlain(ppm& img, int threads, int c){
+
+	int average = (img.width - (img.width % threads + 1)) / threads + 1;
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+
+		ths.push_back(thread(plain, ref(img), c, average * i, average * (i + 1)));
+	}
+
+	plain(img, c, img.width - average, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
 }

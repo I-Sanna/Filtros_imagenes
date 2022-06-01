@@ -43,70 +43,83 @@ int main(int argc , char* argv[]){
 		struct timespec start, stop;    	
 		clock_gettime(CLOCK_REALTIME, &start);
 
-		if (filter == "plain")
-			if(p1 > 0)
-				plain(img, (int)p1);
-			else
-				cout << "ingrese un numero mayor a 0" << endl;
+		if (n == 0){			
 
-		if (filter == "blackWhite")
-			blackWhite(img);
+			if (filter == "plain")
+				if(p1 > 0)
+					plain(img, p1, 0, img.width);
+				else
+					cout << "ingrese un numero mayor a 0" << endl;
 
-		if (filter == "shades")
-			if(p1 > 0)
-				shades(img, (int)p1);
-			else
-				cout << "ingrese un numero mayor a 0" << endl;
+			if (filter == "blackWhite")
+				blackWhite(img);
 
-		if (filter == "merge")
-			if(p1 >= 0 && p1 <= 1){
-				ppm img3(img2);
-				merge(img, img3, p1);
+			if (filter == "shades")
+				if(p1 > 0)
+					shades(img, p1);
+				else
+					cout << "ingrese un numero mayor a 0" << endl;
+
+			if (filter == "merge")
+				if(p1 >= 0 && p1 <= 1){
+					ppm img3(img2);
+					merge(img, img3, p1);
+				}
+				else
+					cout << "ingresar un numero entre 0 y 1 para el porcentaje";
+
+			if (filter == "contrast"){
+				if (p1 < -255)
+					cout << "ingrese un valor entre -255 y 255" << endl;
+				else if (p1 > 255)
+					cout << "ingrese un valor entre -255 y 255" << endl;
+				else
+					contrast(img, p1);
 			}
-			else
-				cout << "ingresar un numero entre 0 y 1 para el porcentaje";
 
-		if (filter == "contrast"){
-			if (p1 < -255)
-				cout << "ingrese un valor entre -255 y 255" << endl;
-			else if (p1 > 255)
-				cout << "ingrese un valor entre -255 y 255" << endl;
-			else
-				contrast(img, p1);
+			if (filter == "boxBlur")
+				boxBlur(img);
+
+			if (filter == "edgeDetection")
+				edgeDetection(img);
+
+			if (filter == "sharpen")
+				sharpen(img);
+
+			if (filter == "brightness"){
+				if (p1 <= 1 && p1 >= -1 )
+					brightness(img, p1);
+				else
+					cout << "ingrese un valor 1 o -1" << endl;
+			}
+
+			if (filter == "frame")
+				if (p1 < 0)
+					cout << "ingrese un valor entre 0 y 255" << endl;
+				else if (p1 > 255)
+					cout << "ingrese un valor entre 0 y 255" << endl;
+				else
+					frame(img, p1, p2);
+
+			if (filter == "crop")
+				crop(img, p1 ,p2);
+
+			if (filter == "zoom")
+				if (p1 <= 1)
+					cout << "ingrese un valor mayor a 2" << endl;
+				else
+					zoom(img, p1);
+
 		}
+		else{
 
-		if (filter == "boxBlur")
-			boxBlur(img);
-
-		if (filter == "edgeDetection")
-			edgeDetection(img);
-
-		if (filter == "sharpen")
-			sharpen(img);
-
-		if (filter == "brightness"){
-			if (p1 <= 1 && p1 >= -1 )
-				brightness(img, p1);
-			else
-				cout << "ingrese un valor 1 o -1" << endl;
+			if (filter == "plain")
+				if(p1 > 0)
+					multiPlain(img, n, p1);
+				else
+					cout << "ingrese un numero mayor a 0" << endl;
+			
 		}
-
-		if (filter == "frame")
-			if (p1 < 0)
-				cout << "ingrese un valor entre 0 y 255" << endl;
-			else if (p1 > 255)
-				cout << "ingrese un valor entre 0 y 255" << endl;
-			else
-				frame(img, p1, p2);
-
-		if (filter == "crop")
-			crop(img, p1 ,p2);
-
-		if (filter == "zoom")
-			if (p1 <= 1)
-				cout << "ingrese un valor mayor a 2" << endl;
-			else
-				zoom(img, p1);
 
 		clock_gettime(CLOCK_REALTIME, &stop);
 

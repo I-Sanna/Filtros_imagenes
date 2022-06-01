@@ -21,10 +21,12 @@ void frame(ppm& img, int color, int x);
 void boxBlur(ppm& img); 
 void zoom(ppm& img, int n); 
 void edgeDetection(ppm& img); 
-void plain(ppm& img, int c); 
+void plain(ppm& img, int c, int start, int end); 
 void sharpen(ppm& img); 
 void crop(ppm& img, int rows, int columns);
 
 // MULTI-THREAD FILTERS
+
+void multiPlain(ppm& img, int threads, int c);
 
 #endif
