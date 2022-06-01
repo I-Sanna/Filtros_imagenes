@@ -52,13 +52,13 @@ int main(int argc , char* argv[]){
 					cout << "ingrese un numero mayor a 0" << endl;
 
 			if (filter == "blackWhite")
-				blackWhite(img);
+				blackWhite(img, 0, img.width);
 
 			if (filter == "shades")
-				if(p1 > 0)
-					shades(img, p1);
+				if(p1 > 1)
+					shades(img, p1, 0, img.width);
 				else
-					cout << "ingrese un numero mayor a 0" << endl;
+					cout << "ingrese un numero mayor a 1" << endl;
 
 			if (filter == "merge")
 				if(p1 >= 0 && p1 <= 1){
@@ -74,7 +74,7 @@ int main(int argc , char* argv[]){
 				else if (p1 > 255)
 					cout << "ingrese un valor entre -255 y 255" << endl;
 				else
-					contrast(img, p1);
+					contrast(img, p1, 0, img.width);
 			}
 
 			if (filter == "boxBlur")
@@ -118,6 +118,24 @@ int main(int argc , char* argv[]){
 					multiPlain(img, n, p1);
 				else
 					cout << "ingrese un numero mayor a 0" << endl;
+
+			if (filter == "blackWhite")
+				multiBlackWhite(img, n);
+
+			if (filter == "shades")
+				if(p1 > 1)
+					multiShades(img, n, p1);
+				else
+					cout << "ingrese un numero mayor a 1" << endl;
+			
+			if (filter == "contrast"){
+				if (p1 < -255)
+					cout << "ingrese un valor entre -255 y 255" << endl;
+				else if (p1 > 255)
+					cout << "ingrese un valor entre -255 y 255" << endl;
+				else
+					multiContrast(img, n, p1);
+			}
 			
 		}
 

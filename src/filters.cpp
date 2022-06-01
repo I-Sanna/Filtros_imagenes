@@ -25,10 +25,10 @@ void plain(ppm& img, int c, int start, int end)
 
 }
 
-void blackWhite(ppm& img){
+void blackWhite(ppm& img, int start, int end){
 
 	for(int i = 0; i < img.height; i++)
-		for(int j = 0; j < img.width; j++){
+		for(int j = start; j < end; j++){
 
 			int R = img.getPixel(i, j).r;
 			int G =	img.getPixel(i, j).g;
@@ -45,9 +45,9 @@ void blackWhite(ppm& img){
 
 }
 
-void shades(ppm& img, int shades){
+void shades(ppm& img, int shades, int start, int end){
 	for(int i = 0; i < img.height; i++)
-		for(int j = 0; j < img.width; j++){
+		for(int j = start; j < end; j++){
 
 			int R = img.getPixel(i, j).r;
 			int G =	img.getPixel(i, j).g;
@@ -67,12 +67,12 @@ void shades(ppm& img, int shades){
 		}	
 }
 
-void contrast(ppm& img, float c){
+void contrast(ppm& img, int c, int start, int end){
 
 	float contraste = (259 * (c + 255))/(255 * (259 - c));
 
 	for(int i = 0; i < img.height; i++)
-		for(int j = 0; j < img.width; j++){
+		for(int j = start; j < end; j++){
 
 			int R = img.getPixel(i, j).r;
 			int G =	img.getPixel(i, j).g;
@@ -219,7 +219,7 @@ void boxBlur(ppm& img){
 
 void edgeDetection(ppm& img){
 
-	blackWhite(img);
+	blackWhite(img, 0, img.width);
 	boxBlur(img);
 
 	ppm imgCopia = img;
@@ -400,7 +400,61 @@ void multiPlain(ppm& img, int threads, int c){
 		ths.push_back(thread(plain, ref(img), c, average * i, average * (i + 1)));
 	}
 
-	plain(img, c, img.width - average, img.width);
+	plain(img, c, average * threads, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
+}
+
+void multiBlackWhite(ppm& img, int threads){
+
+	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+
+		ths.push_back(thread(blackWhite, ref(img), average * i, average * (i + 1)));
+	}
+
+	blackWhite(img, average * threads, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
+}
+
+void multiShades(ppm& img, int threads, int shadesNr){
+
+	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+
+		ths.push_back(thread(shades, ref(img), shadesNr, average * i, average * (i + 1)));
+	}
+
+	shades(img, shadesNr, average * threads, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
+}
+
+void multiContrast(ppm& img, int threads, int contr){
+
+	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+
+		ths.push_back(thread(contrast, ref(img), contr, average * i, average * (i + 1)));
+	}
+
+	contrast(img, contr, average * threads, img.width);
 
 	for (int i = 0; i < ths.size(); i++){
 		ths[i].join();
