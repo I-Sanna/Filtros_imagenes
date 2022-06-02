@@ -124,12 +124,12 @@ void brightness(ppm& img, float b, int start, int end){
 		}	
 }
 
-void merge(ppm& img1, ppm& img2, float perc1){
+void merge(ppm& img1, ppm& img2, float perc1, int start, int end){
 
 	float perc2 = 1 - perc1;
 
 	for(int i = 0; i < img1.height; i++)
-		for(int j = 0; j < img1.width; j++){
+		for(int j = start; j < end; j++){
 
 			int R1 = img1.getPixel(i, j).r;
 			int G1 = img1.getPixel(i, j).g;
@@ -473,6 +473,24 @@ void multiBrightness(ppm& img, int threads, float percentage){
 	}
 
 	brightness(img, percentage, average * threads, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
+}
+
+void multiMerge(ppm& img, ppm& img2, int threads, float percentage){
+
+	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+
+		ths.push_back(thread(merge, ref(img), ref(img2), percentage, average * i, average * (i + 1)));
+	}
+
+	merge(img, img2, percentage, average * threads, img.width);
 
 	for (int i = 0; i < ths.size(); i++){
 		ths[i].join();

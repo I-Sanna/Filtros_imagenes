@@ -63,7 +63,7 @@ int main(int argc , char* argv[]){
 			if (filter == "merge")
 				if(p1 >= 0 && p1 <= 1){
 					ppm img3(img2);
-					merge(img, img3, p1);
+					merge(img, img3, p1, 0, img.width);
 				}
 				else
 					cout << "ingresar un numero entre 0 y 1 para el porcentaje";
@@ -143,6 +143,14 @@ int main(int argc , char* argv[]){
 				else
 					cout << "ingrese un valor 1 o -1" << endl;
 			}
+
+			if (filter == "merge")
+				if(p1 >= 0 && p1 <= 1){
+					ppm img3(img2);
+					multiMerge(img, img3, n, p1);
+				}
+				else
+					cout << "ingresar un numero entre 0 y 1 para el porcentaje";
 			
 		}
 

@@ -16,7 +16,7 @@ void blackWhite(ppm& img, int start, int end);
 void contrast(ppm& img, int contrast, int start, int end);  
 void brightness(ppm& img, float b, int start, int end);
 void shades(ppm& img, int shades, int start, int end); 
-void merge(ppm& img1, ppm &img2, float alpha); 
+void merge(ppm& img1, ppm &img2, float alpha, int start, int end); 
 void frame(ppm& img, int color, int x); 
 void boxBlur(ppm& img); 
 void zoom(ppm& img, int n); 
@@ -32,5 +32,6 @@ void multiBlackWhite(ppm& img, int threads);
 void multiShades(ppm& img, int threads, int shadesNr);
 void multiContrast(ppm& img, int threads, int contr);
 void multiBrightness(ppm& img, int threads, float percentage);
+void multiMerge(ppm& img, ppm& img2, int threads, float percentage);
 
 #endif
