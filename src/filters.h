@@ -34,7 +34,7 @@ void multiContrast(ppm& img, int threads, int contr);
 void multiBrightness(ppm& img, int threads, float percentage);
 void multiMerge(ppm& img, ppm& img2, int threads, float percentage);
 void multiBoxBlur(ppm& img, int threads);
-void multiEdgeDetection(ppm& img, ppm img2, int threads);
-void multiSharpen(ppm& img, ppm img2, int threads);
+void multiEdgeDetection(ppm& img, int threads);
+void multiSharpen(ppm& img, int threads);
 
 #endif

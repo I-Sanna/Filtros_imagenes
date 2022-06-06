@@ -511,9 +511,11 @@ void multiBoxBlur(ppm& img, int threads){
 	}
 }
 
-void multiEdgeDetection(ppm& img, ppm img2, int threads){
+void multiEdgeDetection(ppm& img, int threads){
 
 	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	ppm img2 = img;
 
 	vector<thread> ths;
 
@@ -529,9 +531,11 @@ void multiEdgeDetection(ppm& img, ppm img2, int threads){
 	}
 }
 
-void multiSharpen(ppm& img, ppm img2, int threads){
+void multiSharpen(ppm& img, int threads){
 
 	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	ppm img2 = img;
 
 	vector<thread> ths;
 

@@ -156,10 +156,10 @@ int main(int argc , char* argv[]){
 				multiBoxBlur(img, n);
 
 			if (filter == "edgeDetection")
-				multiEdgeDetection(img, img, n);
+				multiEdgeDetection(img, n);
 
 			if (filter == "sharpen")
-				multiSharpen(img, img, n);
+				multiSharpen(img, n);
 			
 		}
 
