@@ -78,13 +78,13 @@ int main(int argc , char* argv[]){
 			}
 
 			if (filter == "boxBlur")
-				boxBlur(img);
+				boxBlur(img, img, 0, img.width);
 
 			if (filter == "edgeDetection")
-				edgeDetection(img);
+				edgeDetection(img, img, 0, img.width);
 
 			if (filter == "sharpen")
-				sharpen(img);
+				sharpen(img, img, 0, img.width);
 
 			if (filter == "brightness"){
 				if (p1 <= 1 && p1 >= -1 )
@@ -151,6 +151,15 @@ int main(int argc , char* argv[]){
 				}
 				else
 					cout << "ingresar un numero entre 0 y 1 para el porcentaje";
+
+			if (filter == "boxBlur")
+				multiBoxBlur(img, n);
+
+			if (filter == "edgeDetection")
+				multiEdgeDetection(img, img, n);
+
+			if (filter == "sharpen")
+				multiSharpen(img, img, n);
 			
 		}
 

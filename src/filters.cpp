@@ -154,24 +154,22 @@ void merge(ppm& img1, ppm& img2, float perc1, int start, int end){
 		}
 }
 
-void boxBlur(ppm& img){
+void boxBlur(ppm& img, ppm img2, int start, int end){
 
-	ppm img2 = img;
+	vector<int> columna1 = {1, 1, 1};
+	vector<int> columna2 = {1, 1, 1};
+	vector<int> columna3 = {1, 1, 1};
+	vector<vector<int>> matriz = {columna1, columna2, columna3};	
 
 	for(int i = 0; i < img.height; i++){
 
 		if (i == 0 || i == img.height - 1)
 			continue;
 
-		for(int j = 0; j < img.width; j++){
+		for(int j = start; j < end; j++){
 
 			if(j == 0 || j == img.width - 1)
 				continue;
-
-			vector<int> columna1 = {1, 1, 1};
-			vector<int> columna2 = {1, 1, 1};
-			vector<int> columna3 = {1, 1, 1};
-			vector<vector<int>> matriz = {columna1, columna2, columna3};	
 
 			int RT = 0;
 			int GT = 0;
@@ -217,12 +215,20 @@ void boxBlur(ppm& img){
 	}
 }
 
-void edgeDetection(ppm& img){
+void edgeDetection(ppm& img, ppm imgCopia, int start, int end){
 
-	blackWhite(img, 0, img.width);
-	boxBlur(img);
+	blackWhite(img, start, end);
+	boxBlur(img, img, start, end);
 
-	ppm imgCopia = img;
+	vector<int> columnaV1 = {1, 2, 1};
+	vector<int> columnaV2 = {0, 0, 0};
+	vector<int> columnaV3 = {-1, -2, -1};
+	vector<vector<int>> matrizV = {columnaV1, columnaV2, columnaV3};	
+
+	vector<int> columnaH1 = {1, 0, -1};
+	vector<int> columnaH2 = {2, 0, -2};
+	vector<int> columnaH3 = {1, 0, -1};
+	vector<vector<int>> matrizH = {columnaH1, columnaH2, columnaH3};
 
 	for(int i = 0; i < img.height; i++){
 
@@ -232,17 +238,7 @@ void edgeDetection(ppm& img){
 		for(int j = 0; j < img.width; j++){
 
 			if(j == 0 || j == img.width - 1)
-				continue;
-
-			vector<int> columnaV1 = {1, 2, 1};
-			vector<int> columnaV2 = {0, 0, 0};
-			vector<int> columnaV3 = {-1, -2, -1};
-			vector<vector<int>> matrizV = {columnaV1, columnaV2, columnaV3};	
-
-			vector<int> columnaH1 = {1, 0, -1};
-			vector<int> columnaH2 = {2, 0, -2};
-			vector<int> columnaH3 = {1, 0, -1};
-			vector<vector<int>> matrizH = {columnaH1, columnaH2, columnaH3};	
+				continue;	
 
 			int BW = 0;
 
@@ -288,9 +284,12 @@ void edgeDetection(ppm& img){
 	}
 }
 
-void sharpen(ppm& img){
+void sharpen(ppm& img, ppm img2, int start, int end){
 
-	ppm img2 = img;
+	vector<int> columna1 = {0, -1, 0};
+	vector<int> columna2 = {-1, 5, -1};
+	vector<int> columna3 = {0, -1, 0};
+	vector<vector<int>> matriz = {columna1, columna2, columna3};	
 
 	for(int i = 0; i < img.height; i++){
 
@@ -301,11 +300,6 @@ void sharpen(ppm& img){
 
 			if(j == 0 || j == img.width - 1)
 				continue;
-
-			vector<int> columna1 = {0, -1, 0};
-			vector<int> columna2 = {-1, 5, -1};
-			vector<int> columna3 = {0, -1, 0};
-			vector<vector<int>> matriz = {columna1, columna2, columna3};	
 
 			int RT = 0;
 			int GT = 0;
@@ -491,6 +485,62 @@ void multiMerge(ppm& img, ppm& img2, int threads, float percentage){
 	}
 
 	merge(img, img2, percentage, average * threads, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
+}
+
+void multiBoxBlur(ppm& img, int threads){
+
+	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	ppm img2 = img;
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+
+		ths.push_back(thread(boxBlur, ref(img), img2, average * i, average * (i + 1)));
+	}
+
+	boxBlur(img, img2, average * threads, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
+}
+
+void multiEdgeDetection(ppm& img, ppm img2, int threads){
+
+	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+
+		ths.push_back(thread(edgeDetection, ref(img), img2, average * i, average * (i + 1)));
+	}
+
+	edgeDetection(img, img2, average * threads, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
+}
+
+void multiSharpen(ppm& img, ppm img2, int threads){
+
+	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+
+		ths.push_back(thread(sharpen, ref(img), img2, average * i, average * (i + 1)));
+	}
+
+	sharpen(img, img2, average * threads, img.width);
 
 	for (int i = 0; i < ths.size(); i++){
 		ths[i].join();
