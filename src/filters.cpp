@@ -348,10 +348,10 @@ void sharpen(ppm& img, ppm img2, int start, int end){
 	}
 }
 
-void frame(ppm& img, int color, int x){
+void frame(ppm& img, int color, int x, int start, int end){
 
 	for(int i = 0; i < img.height; i++)
-		for(int j = 0; j < img.width; j++){
+		for(int j = start; j < end; j++){
 
 			if (i < x || j < x || i > img.height - x || j > img.width - x)
 				img.setPixel(i, j, pixel(color, color, color));
@@ -368,17 +368,14 @@ void crop(ppm& img, int rows, int columns){
 	img = img2;
 }
 
-void zoom(ppm& img, int zoom){
-	ppm img_zoomed(img.width * zoom, img.height * zoom);
+void zoom(ppm& img, ppm& img_zoomed, int zoom, int start, int end){
 
 	for(int i = 0; i < img.height; i++)
-		for(int j = 0; j < img.width; j++)
+		for(int j = start; j < end; j++)
 
 			for(int x = 0; x < zoom; x++)
 				for (int y = 0; y < zoom; y++)
 					img_zoomed.setPixel((i * zoom) + x, (j * zoom) + y, img.getPixel(i,j));
-
-	img = img_zoomed;
 }
 
 // MULTI-THREAD FUNCTIONS
@@ -549,4 +546,26 @@ void multiSharpen(ppm& img, int threads){
 	for (int i = 0; i < ths.size(); i++){
 		ths[i].join();
 	}
+}
+
+void multiZoom(ppm& img, int threads, int ampl){
+
+	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	ppm img_zoomed(img.width * ampl, img.height * ampl);
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+
+		ths.push_back(thread(zoom, ref(img), ref(img_zoomed), ampl, average * i, average * (i + 1)));
+	}
+
+	zoom(img, img_zoomed, ampl, average * threads, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
+
+	img = img_zoomed;
 }

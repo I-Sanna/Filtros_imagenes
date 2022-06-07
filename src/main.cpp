@@ -99,7 +99,7 @@ int main(int argc , char* argv[]){
 				else if (p1 > 255)
 					cout << "ingrese un valor entre 0 y 255" << endl;
 				else
-					frame(img, p1, p2);
+					frame(img, p1, p2, 0, img.width);
 
 			if (filter == "crop")
 				crop(img, p1 ,p2);
@@ -107,8 +107,11 @@ int main(int argc , char* argv[]){
 			if (filter == "zoom")
 				if (p1 <= 1)
 					cout << "ingrese un valor mayor a 2" << endl;
-				else
-					zoom(img, p1);
+				else{
+					ppm img_zoomed(img.width * p1, img.height * p1);
+					zoom(img, img_zoomed, p1, 0, img.width);
+					img = img_zoomed;
+				}
 
 		}
 		else{
@@ -160,6 +163,13 @@ int main(int argc , char* argv[]){
 
 			if (filter == "sharpen")
 				multiSharpen(img, n);
+
+			if (filter == "zoom")
+				if (p1 <= 1)
+					cout << "ingrese un valor mayor a 2" << endl;
+				else{
+					multiZoom(img, n, p1);
+				}
 			
 		}
 
