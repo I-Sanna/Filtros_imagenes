@@ -23,7 +23,7 @@ void zoom(ppm& img, ppm& img_zoomed, int zoom, int start, int end);
 void edgeDetection(ppm& img, ppm img2, int start, int end); 
 void plain(ppm& img, int c, int start, int end); 
 void sharpen(ppm& img, ppm img2, int start, int end); 
-void crop(ppm& img, int rows, int columns);
+void crop(ppm& img, ppm& img2, int rows, int columns, int start, int end);
 
 // MULTI-THREAD FILTERS
 
@@ -37,5 +37,7 @@ void multiBoxBlur(ppm& img, int threads);
 void multiEdgeDetection(ppm& img, int threads);
 void multiSharpen(ppm& img, int threads);
 void multiZoom(ppm& img, int threads, int ampl);
+void multiFrame(ppm& img, int threads, int color, int x);
+void multiCrop(ppm& img, int threads, int rows, int columns);
 
 #endif

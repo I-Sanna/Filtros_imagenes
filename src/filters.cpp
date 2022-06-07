@@ -358,14 +358,13 @@ void frame(ppm& img, int color, int x, int start, int end){
 		}	
 }
 
-void crop(ppm& img, int rows, int columns){
-	ppm img2(img.width - columns, img.height - rows);
+void crop(ppm& img, ppm& img2, int rows, int columns, int start, int end){
 	
 	for(int i = rows; i < img.height; i++)
-		for(int j = columns; j < img.width; j++){
+		for(int j = (columns + start); j < end; j++){
+			cout << i << " / " << j << endl;
 			img2.setPixel(i - rows, j - columns, img.getPixel(i,j));
 		}	
-	img = img2;
 }
 
 void zoom(ppm& img, ppm& img_zoomed, int zoom, int start, int end){
@@ -568,4 +567,44 @@ void multiZoom(ppm& img, int threads, int ampl){
 	}
 
 	img = img_zoomed;
+}
+
+void multiFrame(ppm& img, int threads, int color, int x){
+
+	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+
+		ths.push_back(thread(frame, ref(img), color, x, average * i, average * (i + 1)));
+	}
+
+	frame(img, color, x, average * threads, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
+}
+
+void multiCrop(ppm& img, int threads, int rows, int columns){
+
+	ppm img2(img.width - columns, img.height - rows);
+
+	int average = (img.width - (img.width % threads + 1)) / (threads + 1);
+
+	vector<thread> ths;
+
+	for (int i = 0; i < threads; i++){
+		
+		ths.push_back(thread(crop, ref(img), ref(img2), rows, columns, average * i, average * (i + 1) + columns));
+	}
+
+	crop(img, img2, rows, columns, average * threads, img.width);
+
+	for (int i = 0; i < ths.size(); i++){
+		ths[i].join();
+	}
+
+	img = img2;
 }

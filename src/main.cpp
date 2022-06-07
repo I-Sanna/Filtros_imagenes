@@ -101,8 +101,13 @@ int main(int argc , char* argv[]){
 				else
 					frame(img, p1, p2, 0, img.width);
 
-			if (filter == "crop")
-				crop(img, p1 ,p2);
+			if (filter == "crop"){
+				ppm imgCopia(img.width - p2, img.height - p1);
+
+				crop(img, imgCopia, p1 , p2, 0, img.width);
+				
+				img = imgCopia;
+			}
 
 			if (filter == "zoom")
 				if (p1 <= 1)
@@ -171,6 +176,17 @@ int main(int argc , char* argv[]){
 					multiZoom(img, n, p1);
 				}
 			
+			if (filter == "frame")
+				if (p1 < 0)
+					cout << "ingrese un valor entre 0 y 255" << endl;
+				else if (p1 > 255)
+					cout << "ingrese un valor entre 0 y 255" << endl;
+				else
+					multiFrame(img, n, p1, p2);
+
+			if (filter == "crop")
+				multiCrop(img, n, p1, p2);
+
 		}
 
 		clock_gettime(CLOCK_REALTIME, &stop);
