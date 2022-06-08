@@ -17,31 +17,44 @@ def show_image():
     plt.imshow(img)
     st.pyplot()
 
-def run_filters(c, b, blur, bw):
+    if 'img' not in st.session_state:
+        st.session_state['img'] = img
+
+def run_filters(c, b, blur, bw, sh, ed, s, cp, rows, columns, fr, color, margin, zoom, multi):
 
     if blur:
         filters = 'boxBlur'
         ps = 0
-        cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../imgs/ashitaka.ppm ../out/salida.ppm'
+        cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../out/salida.ppm ../out/salida.ppm'
         os.system(cmd)
     
     filters = 'contrast'
     ps = c
-    cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../imgs/ashitaka.ppm ../out/salida.ppm'
+    cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../out/salida.ppm ../out/salida.ppm'
 
     os.system(cmd)
 
     filters = 'brightness'
     ps = b / 100
-    cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../imgs/ashitaka.ppm ../out/salida.ppm'
+    cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../out/salida.ppm ../out/salida.ppm'
 
     os.system(cmd)
 
     if bw:
         filters = 'blackWhite'
         ps = 0
-        cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../imgs/ashitaka.ppm ../out/salida.ppm'
+        cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../out/salida.ppm ../out/salida.ppm'
         os.system(cmd)
+
+if 'ed' in st.session_state:
+
+    if st.session_state['ed']:
+        st.session_state['bw'] = False
+        st.session_state['blur'] = False
+
+    elif st.session_state['bw'] or st.session_state['blur']:
+        st.session_state['ed'] = False
+
    
 # Sidebar
 st.sidebar.header('Parámetros')
@@ -49,13 +62,38 @@ st.sidebar.header('Parámetros')
 c = st.sidebar.slider('Contraste',-255, 255, 0, 1, '%d')
 b = st.sidebar.slider('Brillo', -100, 100, 0, 1, '%d')
 
-blur = st.sidebar.checkbox('Box blur',value=False)
-bw = st.sidebar.checkbox('BlackWhite',value=False)
+sh = st.sidebar.checkbox('Sharpen',value = False, key='sh')
+ed = st.sidebar.checkbox('EdgeDetection',value = False, key='ed')
+blur = st.sidebar.checkbox('Box blur',value = False, key='blur')
+bw = st.sidebar.checkbox('BlackWhite',value = False, key='bw')
 
+if bw:
+    s = st.sidebar.slider('Shades', 2, 64, 2, 1, '%d')
+
+st.sidebar.header('Otros')
+
+cp = st.sidebar.checkbox('Crop',value = False, key='cp')
+
+if cp:
+    rows = st.sidebar.number_input("Filas", 1)
+    columns = st.sidebar.number_input("Columnas", 1)
+
+fr = st.sidebar.checkbox('Frame',value = False, key='fr')
+
+if fr:
+    color = st.sidebar.number_input("Escala de gris", 0, 255)
+    margin = st.sidebar.number_input("Tamaño del marco", 1)
+
+zoom = st.sidebar.checkbox('Zoom',value = False, key='zoom')
+
+if zoom:
+    multi = st.sidebar.number_input("Multiplicador", 2)
 
 if st.sidebar.button('Aplicar'):
-    run_filters(c, b, blur, bw)
+    run_filters(c, b, blur, bw, sh, ed, s, cp, rows, columns, fr, color, margin, zoom, multi)
 
+if st.sidebar.button('Reset'):
+    imageio.imwrite('../out/salida.ppm', st.session_state['img'])
 
 # Main layout
 st.title('Filtros de imagenes')
