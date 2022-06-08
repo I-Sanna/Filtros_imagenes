@@ -54,7 +54,7 @@ int main(int argc , char* argv[]){
 			vector<string> p2S = split(p2L, ' ');
 			for (int i = 0; i < p2S.size(); i++){
 				p2V.push_back(stof(p2S[i]));
-		}
+			}
 		}
 			
 		if(argc > 7){
