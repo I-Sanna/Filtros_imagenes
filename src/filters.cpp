@@ -362,7 +362,6 @@ void crop(ppm& img, ppm& img2, int rows, int columns, int start, int end){
 	
 	for(int i = rows; i < img.height; i++)
 		for(int j = (columns + start); j < end; j++){
-			cout << i << " / " << j << endl;
 			img2.setPixel(i - rows, j - columns, img.getPixel(i,j));
 		}	
 }

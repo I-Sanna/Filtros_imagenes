@@ -23,7 +23,6 @@ int main(int argc , char* argv[]){
 		cout << "Uso: ./main <filtro> <nthreads> <[p1]> <img1> <custom_output> <[p2]> <img2>" << endl;
 	}
 	else{
-
 		string filter = string(argv[1]);
 		unsigned int n = atoi(argv[2]);
 		float p1 = atof(argv[3]);
