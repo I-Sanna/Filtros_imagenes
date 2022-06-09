@@ -22,29 +22,53 @@ def show_image():
 
 def run_filters(c, b, blur, bw, sh, ed, s, cp, rows, columns, fr, color, margin, zoom, multi):
 
+    ps = ""
+    ps3 = ""
+    filters = ""
+
+    if cp:
+        filters += 'crop '
+        ps += str(rows) + ' '
+        ps3 += str(columns) + ' '
+
     if blur:
-        filters = 'boxBlur'
-        ps = 0
-        cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../out/salida.ppm ../out/salida.ppm'
-        os.system(cmd)
+        filters += 'boxBlur '
+        ps += '0 '
     
-    filters = 'contrast'
-    ps = c
-    cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../out/salida.ppm ../out/salida.ppm'
+    if ed:
+        filters += 'edgeDetection '
+        ps += '0 '
 
-    os.system(cmd)
+    if sh:
+        filters += 'sharpen '
+        ps += '0 '
+    
+    filters += 'contrast '
+    ps += str(c) + ' '
 
-    filters = 'brightness'
-    ps = b / 100
-    cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../out/salida.ppm ../out/salida.ppm'
-
-    os.system(cmd)
+    filters += 'brightness '
+    ps += str(b / 100) + ' '
 
     if bw:
-        filters = 'blackWhite'
-        ps = 0
-        cmd = '../main ' + filters + ' 1 ' + str(ps) + ' ../out/salida.ppm ../out/salida.ppm'
-        os.system(cmd)
+        filters += 'shades '
+        ps += str(s) + ' '
+
+    if fr:
+        filters += 'frame '
+        ps += str(color) + ' '
+        ps3 += str(margin) + ' '
+
+    if zoom:
+        filters += 'zoom '
+        ps += str(multi) + ' '
+
+    ps = ps[:-1]
+    ps3 = ps3[:-1]
+
+    cmd = '..\main "' + filters + '" 1 "' + ps + '" ../imgs/ashitaka.ppm ../out/salida.ppm '
+    if ps3 != "":
+        cmd += '"' + ps3 + '"'
+    os.system(cmd)
 
 if 'ed' in st.session_state:
 
@@ -66,6 +90,13 @@ sh = st.sidebar.checkbox('Sharpen',value = False, key='sh')
 ed = st.sidebar.checkbox('EdgeDetection',value = False, key='ed')
 blur = st.sidebar.checkbox('Box blur',value = False, key='blur')
 bw = st.sidebar.checkbox('BlackWhite',value = False, key='bw')
+
+s = 0
+rows = 0
+columns = 0
+color = 0
+margin = 0
+multi = 0
 
 if bw:
     s = st.sidebar.slider('Shades', 2, 64, 2, 1, '%d')

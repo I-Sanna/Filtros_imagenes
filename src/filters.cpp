@@ -69,7 +69,10 @@ void shades(ppm& img, int shades, int start, int end){
 
 void contrast(ppm& img, int c, int start, int end){
 
-	float contraste = (259 * (c + 255))/(255 * (259 - c));
+	float numerador = 259 * (c + 255);
+	float denominador = 255 * (259 - c);
+
+	float contraste = numerador / denominador;
 
 	for(int i = 0; i < img.height; i++)
 		for(int j = start; j < end; j++){
